@@ -1,4 +1,6 @@
-![Bot Icon](https://tele.chaerul.xyz/icon)
+<p align="center">
+  <img src="https://tele.chaerul.xyz/icon" width="200" />
+</p>
 Bot Telegram Controller PC berbasis WebSocket (WSS) untuk mengontrol komputer secara remote secara realtime.
 
 untuk server bisa install [Di sini](https://github.com/chaerul24/server-for-bot-telegram)
