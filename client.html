@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Screen</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #screen {
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain; /* atau cover kalau mau full tanpa kosong */
+      background: black;
+    }
+
+    #status {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      color: #0f0;
+      font-size: 12px;
+      background: rgba(0,0,0,0.5);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+
+<body>
+
+<img id="screen">
+<div id="status">Connecting...</div>
+
+<script>
+function getParam(name) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(name);
+}
+
+function connect() {
+  const kode = getParam("kode");
+  const host = window.location.host;
+
+  const wsUrl = `ws://${host}/live?kode=${kode}`;
+  const ws = new WebSocket(wsUrl);
+
+  const status = document.getElementById("status");
+
+  ws.onopen = () => {
+    // status.innerText = "🟢 Connected";
+  };
+
+  ws.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+
+    if (msg.type === "screen") {
+      document.getElementById("screen").src =
+        "data:image/jpeg;base64," + msg.data;
+    }
+  };
+
+  ws.onerror = () => {
+    status.innerText = "Error";
+  };
+
+  ws.onclose = () => {
+    status.innerText = "Disconnected";
+  };
+}
+
+window.onload = connect;
+</script>
+
+</body>
+</html>
